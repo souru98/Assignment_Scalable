@@ -73,7 +73,7 @@ def increase_book_count(book_id):
     book.book_count += quantity
     db.session.commit()
 
-    return {'book_count': book.book_count}
+    return {"Status": "Book Count Updated Successfully"}
 
 
 @book_blueprint.route('/book/decrease/<int:book_id>', methods=['PUT'])
@@ -89,4 +89,4 @@ def decrease_book_count(book_id):
     book.book_count -= quantity
     db.session.commit()
 
-    return {'book_count': book.book_count}
+    return {"Status": "Book Count Updated Successfully"}
