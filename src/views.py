@@ -23,12 +23,11 @@ def add_book():
     db.session.add(new_book)
     db.session.commit()
 
-    return {'id': new_book.id}
+    return {'status': "Book added to inventory successfully"}
 
 
 @book_blueprint.route('/book/search/<name>', methods=['GET'])
 def search_book(name):
-
     book = Book.query.filter_by(name=name).first()
     if book is None:
         return {"error": "Book not found"}, 404
@@ -62,3 +61,32 @@ def get_all_books():
     return {'books': [
         {'name': book.name, 'author': book.author, 'description': book.description, 'book_count': book.book_count}
         for book in books]}
+
+
+@book_blueprint.route('/book/increase/<int:book_id>', methods=['PUT'])
+def increase_book_count(book_id):
+    quantity = request.json.get('quantity', 1)
+    book = Book.query.get(book_id)
+    if book is None:
+        return {"error": "Book not found"}, 404
+
+    book.book_count += quantity
+    db.session.commit()
+
+    return {'book_count': book.book_count}
+
+
+@book_blueprint.route('/book/decrease/<int:book_id>', methods=['PUT'])
+def decrease_book_count(book_id):
+    quantity = request.json.get('quantity', 1)
+    book = Book.query.get(book_id)
+    if book is None:
+        return {"error": "Book not found"}, 404
+
+    if book.book_count < quantity:
+        return {"error": "Not enough books in stock"}, 400
+
+    book.book_count -= quantity
+    db.session.commit()
+
+    return {'book_count': book.book_count}
