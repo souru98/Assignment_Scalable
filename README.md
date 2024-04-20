@@ -46,23 +46,33 @@ Follow these steps to deploy your application to MiniKube:
 1. **Navigate to Project Directory**: 
    Open Windows PowerShell and navigate to your project directory using the `cd` command.
 
-2. **Start MiniKube**: 
-   Start your MiniKube cluster with the command `minikube start`.
+2. ** change MiniKube Driver to Docker**
+   ```
+   minikube config set driver docker
 
-3. **Set Docker Environment**: 
+3. **Start MiniKube**: 
+   Start your MiniKube cluster with the command 
+   ```
+   minikube start`.
+
+4. ** Initialize MiniKube Env**
+   ```
+   minikube docker-env
+
+5. **Set Docker Environment**: 
    Set up the Docker environment inside MiniKube. Run the following command in PowerShell:
    ```powershell
    minikube -p minikube docker-env --shell powershell | Invoke-Expression
    
-4. **Build Docker Image**
+6. **Build Docker Image**
    ```powershell
    docker build -t product_service/flask_api:1.0 .
    
-5. **Create Kubernetes Deployment**
+7. **Create Kubernetes Deployment**
    ```powershell
    kubectl run product-service-mk --image=product_service/flask_api:1.0 --image-pull-policy=Never --port=4000
    
-6. **Port Forwarding**
+8. **Port Forwarding**
    ```powershell
    kubectl port-forward product-service-mk 4000
 
